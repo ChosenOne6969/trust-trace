@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+/* 1. RESET & THEME FOUNDATION */
+:root {
+  --background: #f8fafc !important;
+  --foreground: #0f172a !important;
+  --header-trust: #0f172a !important; /* Force dark in light mode */
+  --header-trace: #2563eb !important;
+  --sidebar-bg: #0f172a !important;   /* Force dark sidebar */
+}
+
+.dark {
+  --background: #020617 !important;
+  --foreground: #f8fafc !important;
+  --header-trust: #ffffff !important; /* Force white in dark mode */
+  --header-trace: #60a5fa !important;
+  --sidebar-bg: #1e293b !important;
+}
+
+/* 2. SPECIFIC COMPONENT FIXES */
+.text-trust {
+  color: var(--header-trust) !important;
+}
+
+.text-trace {
+  color: var(--header-trace) !important;
+}
+
+.philosophy-card {
+  background-color: var(--sidebar-bg) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 3. MESH GRADIENTS */
+.mesh-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  background-color: var(--background);
+}
+
+/* Add this to your existing globals.css */
+.glass-card:hover .text-sm {
+  text-shadow: 0 0 20px rgba(37, 99, 235, 0.2);
+}
+
+/* Update your existing .text-trust and .text-trace classes */
+.text-trust {
+  color: #0f172a !important; /* Force Navy for Light Mode */
+}
+
+.dark .text-trust {
+  color: #ffffff !important; /* Force White for Dark Mode */
+}
+
+.text-trace {
+  color: #2563eb !important; /* Force Blue */
+}
+
+/* Ensure glass panels don't wash out text */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.dark .glass-card {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid #1e293b !important;
+}
