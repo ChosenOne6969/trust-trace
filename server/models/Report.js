@@ -1,41 +1,47 @@
 const mongoose = require('mongoose');
 
 const ReportSchema = new mongoose.Schema({
-  // Link to the User model - Essential for the Profile Page
+  // Essential for linking traces to the User Dossier
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true
   },
-  // The entity being tracked
   websiteUrl: {
     type: String,
     required: true,
     trim: true
   },
-  // Restored Metadata Fields
   productName: {
     type: String,
     required: true,
     trim: true
   },
+  // Updated to match the frontend selection options
   category: {
     type: String,
     required: true,
-    enum: ['electronics', 'fashion', 'home', 'services', 'other']
+    enum: ['electronics', 'fashion', 'home', 'services', 'luxury', 'software', 'other'],
+    default: 'other'
   },
   price: {
     type: Number,
     required: true
   },
-  // Experience Outcome
+  // Global currency support
+  currency: {
+    type: String,
+    required: true,
+    enum: ['USD', 'EUR', 'GBP', 'INR', 'CAD', 'AUD'],
+    default: 'USD'
+  },
+  // Supports the new Partial/Wrong Item outcome
   outcome: {
     type: String,
     required: true,
     enum: ['delivered', 'partial', 'not_delivered'],
     default: 'delivered'
   },
-  // Automatic Timestamp
   timestamp: {
     type: Date,
     default: Date.now

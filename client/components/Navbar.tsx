@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+// Import the dynamic API URL we configured earlier
+import { API_URL } from '@/utils/api'; 
 
 export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
@@ -15,23 +17,27 @@ export default function Navbar() {
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
-    // Fetch report count to determine rank badge
     const fetchRankData = async () => {
       const token = localStorage.getItem('token');
+      // Only attempt fetch if a token exists to avoid 401 errors on initial load
       if (token) {
         try {
-          const res = await axios.get('http://localhost:5000/api/reports/my-traces', {
+          // Changed hardcoded localhost to the dynamic API_URL
+          const res = await axios.get(`${API_URL}/api/reports/my-traces`, {
             headers: { 'x-auth-token': token }
           });
-          setReportCount(Array.isArray(res.data) ? res.data.length : 0);
-        } catch (err) { console.error("Rank fetch failed"); }
+          // Added a null-check to ensure res.data exists before checking length
+          setReportCount(res.data && Array.isArray(res.data) ? res.data.length : 0);
+        } catch (err) { 
+          console.error("Rank fetch failed: Check backend route /api/reports/my-traces"); 
+        }
       }
     };
+    
     fetchRankData();
     return () => observer.disconnect();
   }, []);
 
-  // Rank Logic based on levels (1 level = 5 traces)
   const getRankInfo = () => {
     if (reportCount >= 20) return { title: 'Titan Guardian', color: 'bg-rose-600', glow: 'shadow-[0_0_15px_rgba(225,29,72,0.5)]' };
     if (reportCount >= 10) return { title: 'Silver Guardian', color: 'bg-slate-400', glow: 'shadow-[0_0_15px_rgba(148,163,184,0.5)]' };
@@ -62,7 +68,6 @@ export default function Navbar() {
           <span className="w-2 h-2 bg-blue-600 rounded-full group-hover:animate-pulse transition-all"></span>
         </Link>
 
-        {/* RANK BADGE */}
         <div className={`px-4 py-1.5 rounded-full ${rank.color} ${rank.glow} transition-all duration-500 hover:scale-110 cursor-default hidden lg:block`}>
           <p className="text-[8px] font-black text-white uppercase tracking-[0.2em]">{rank.title}</p>
         </div>
